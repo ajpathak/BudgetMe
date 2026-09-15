@@ -44,6 +44,7 @@ export const localStorageRepository: BudgetRepository = {
   },
 }
 
-export async function swapToBackend(_endpoint: string): Promise<BudgetRepository> {
+export async function swapToBackend(endpoint: string): Promise<BudgetRepository> {
+  void endpoint
   return localStorageRepository
 }

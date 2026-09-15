@@ -35,8 +35,8 @@ export function ExpenseForm({ monthKey, expense, onDone }: Props) {
   )
   const [date, setDate] = useState(expense?.date ?? todayInMonth(monthKey))
   const [note, setNote] = useState(expense?.note ?? "")
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | "">(
-    expense?.paymentMethod ?? ""
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | "none">(
+    expense?.paymentMethod ?? "none"
   )
   const [isRecurring, setIsRecurring] = useState(Boolean(expense?.isRecurring))
   const [error, setError] = useState("")
@@ -63,7 +63,7 @@ export function ExpenseForm({ monthKey, expense, onDone }: Props) {
       categoryId,
       date,
       note,
-      paymentMethod: paymentMethod || undefined,
+      paymentMethod: paymentMethod === "none" ? undefined : paymentMethod,
       isRecurring,
       recurringId: expense?.recurringId,
     }
@@ -143,12 +143,15 @@ export function ExpenseForm({ monthKey, expense, onDone }: Props) {
         <Label>Payment method</Label>
         <Select
           value={paymentMethod}
-          onValueChange={(value) => setPaymentMethod((value as PaymentMethod) ?? "")}
+          onValueChange={(value) =>
+            setPaymentMethod((value as PaymentMethod | "none") ?? "none")
+          }
         >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Optional" />
           </SelectTrigger>
           <SelectContent>
+            <SelectItem value="none">None</SelectItem>
             {PAYMENT_METHODS.map((method) => (
               <SelectItem key={method} value={method}>
                 {PAYMENT_LABELS[method]}
